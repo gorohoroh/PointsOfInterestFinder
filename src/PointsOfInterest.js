@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Typography} from 'antd';
+import {Radio, Typography} from 'antd';
 import {Map, Marker, ZoomControl} from "pigeon-maps";
 import './styles.scss';
 import predefinedLocations from "./data/regions"
@@ -20,10 +20,27 @@ function PointsOfInterest() {
         getPointsOfInterest()
     }, [city])
 
+    const handleLocationChange = e => {
+        e.preventDefault()
+        setCity(predefinedLocations.find(x => x.name === e.target.value));
+    };
+
     return ( pointsOfInterest &&
         <div className="content">
             <div className="title">
                 <Title>Points of Interest</Title>
+            </div>
+
+            <div className="controls">
+                <Radio.Group
+                    className="locations"
+                    value={city.name}
+                    onChange={handleLocationChange}
+                    size="large">
+                    {predefinedLocations.map(x => (
+                        <Radio.Button key={x.name} value={x.name}>{x.name}</Radio.Button>
+                    ))}
+                </Radio.Group>
             </div>
 
             <div className="map">
