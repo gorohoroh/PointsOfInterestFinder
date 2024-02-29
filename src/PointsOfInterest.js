@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Radio, Typography} from 'antd';
-import {Map, Marker, ZoomControl} from "pigeon-maps";
+import {Image, Popover, Radio, Tag, Typography} from 'antd';
 import './styles.scss';
 import predefinedLocations from "./data/regions"
 import {getPointsOfInterestBySquare} from "./data/amadeus";
+import {Map, Overlay, ZoomControl} from "pigeon-maps";
 
 const {Title} = Typography;
 
@@ -51,14 +51,23 @@ function PointsOfInterest() {
                     <ZoomControl/>
 
                     {pointsOfInterest.length > 0 && pointsOfInterest.map(location => {
-                        return (<Marker
-                                width={50}
+                        return (
+                            <Overlay
                                 anchor={[location.geoCode.latitude, location.geoCode.longitude]}
-                            />
-
+                            >
+                                <Popover
+                                    title={location.name}
+                                    content={location.tags && location.tags.map(x => <Tag color="red">{x}</Tag>)}
+                                >
+                                    <Image
+                                        src="./marker.svg"
+                                        height={50}
+                                        preview={false}
+                                    />
+                                </Popover>
+                            </Overlay>
                         );
                     })}
-
                 </Map>
             </div>
         </div>
